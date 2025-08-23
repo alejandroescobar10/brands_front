@@ -82,11 +82,21 @@ export default function BrandsList() {
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 text-gray-600">
               <tr>
-                <th className="p-3 text-left font-semibold w-24">{t("table.number")}</th>
-                <th className="p-3 text-left font-semibold">{t("table.brand")}</th>
-                <th className="p-3 text-left font-semibold">{t("table.owner")}</th>
-                <th className="p-3 text-left font-semibold">{t("table.status")}</th>
-                <th className="p-3 text-right font-semibold w-56">{t("table.actions")}</th>
+                <th className="p-3 text-left font-semibold w-24">
+                  {t("table.number")}
+                </th>
+                <th className="p-3 text-left font-semibold">
+                  {t("table.brand")}
+                </th>
+                <th className="p-3 text-left font-semibold">
+                  {t("table.owner")}
+                </th>
+                <th className="p-3 text-left font-semibold">
+                  {t("table.status")}
+                </th>
+                <th className="p-3 text-right font-semibold w-56">
+                  {t("table.actions")}
+                </th>
               </tr>
             </thead>
             <tbody>
