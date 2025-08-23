@@ -51,7 +51,7 @@ export default function BrandsList() {
         </Link>
       </div>
 
-      {/* Barra de filtros (buscador + selector de límite) */}
+      {/* Filtros */}
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 w-full">
         <input
           className="w-full border rounded-lg px-3 py-2 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-black/10"
@@ -78,10 +78,66 @@ export default function BrandsList() {
         </select>
       </div>
 
-      {/* Tabla de marcas */}
-      <div className="rounded-2xl border bg-white shadow-sm overflow-hidden w-full">
+      {/* ====== MOBILE (cards) ====== */}
+      <div className="md:hidden space-y-3">
+        {items.map((b, i) => (
+          <div key={b.id} className="rounded-xl border bg-white shadow-sm p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="font-semibold truncate">{b.brand_name}</div>
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
+                ${
+                  b.status === "active"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : b.status === "inactive"
+                    ? "bg-gray-200 text-gray-700"
+                    : "bg-amber-100 text-amber-800"
+                }`}
+              >
+                {b.status === "active"
+                  ? t("status.active")
+                  : b.status === "inactive"
+                  ? t("status.inactive")
+                  : t("status.draft")}
+              </span>
+            </div>
+
+            <div className="mt-1 text-sm text-gray-600">
+              <span className="font-medium">{t("table.owner")}:</span>{" "}
+              {b.titular ?? "-"}
+            </div>
+
+            <div className="mt-3 flex items-center justify-between">
+              <div className="text-xs text-gray-500">#{offset + i + 1}</div>
+              <div className="inline-flex gap-3">
+                <button
+                  className="text-red-600 hover:text-red-700 font-semibold"
+                  onClick={() => setToDelete(b.id)}
+                >
+                  {t("actions.delete")}
+                </button>
+                <Link
+                  to={`/brands/${b.id}/edit`}
+                  className="text-emerald-600 hover:text-emerald-700 font-semibold"
+                >
+                  {t("actions.update")}
+                </Link>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {!loading && items.length === 0 && (
+          <div className="rounded-xl border bg-white p-6 text-center text-gray-500">
+            {t("list.empty")}
+          </div>
+        )}
+      </div>
+
+      {/* ====== DESKTOP (tabla) ====== */}
+      <div className="hidden md:block rounded-2xl border bg-white shadow-sm overflow-hidden w-full">
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
+          <table className="min-w-full text-sm table-auto">
             <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <th className="p-3 text-left font-semibold w-24">
@@ -108,7 +164,6 @@ export default function BrandsList() {
                   <td className="p-3 font-medium">{b.brand_name}</td>
                   <td className="p-3">{b.titular ?? "-"}</td>
                   <td className="p-3">
-                    {/* Badge de estado */}
                     <span
                       className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
                       ${
@@ -127,7 +182,6 @@ export default function BrandsList() {
                     </span>
                   </td>
                   <td className="p-3 text-right">
-                    {/* Acciones: eliminar / editar */}
                     <div className="inline-flex gap-2">
                       <button
                         className="text-red-600 hover:text-red-700 font-semibold"
@@ -147,7 +201,6 @@ export default function BrandsList() {
                 </tr>
               ))}
 
-              {/* Mensaje si la tabla está vacía */}
               {!loading && items.length === 0 && (
                 <tr>
                   <td className="p-6 text-center text-gray-500" colSpan={5}>
@@ -158,31 +211,31 @@ export default function BrandsList() {
             </tbody>
           </table>
         </div>
+      </div>
 
-        {/* Paginación */}
-        <div className="flex items-center justify-between gap-3 p-3 bg-gray-50">
-          <div className="text-sm text-gray-600">
-            {t("list.showing", { count: items.length, total })}
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              disabled={offset === 0}
-              onClick={() => setOffset(Math.max(0, offset - limit))}
-              className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
-            >
-              Anterior
-            </button>
-            <span className="text-sm text-gray-600">
-              {t("list.pageOf", { current: currentPage, pages })}
-            </span>
-            <button
-              disabled={offset + limit >= total}
-              onClick={() => setOffset(offset + limit)}
-              className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
-            >
-              Siguiente
-            </button>
-          </div>
+      {/* Paginación (común a mobile/desktop) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-gray-50 rounded-xl">
+        <div className="text-sm text-gray-600">
+          {t("list.showing", { count: items.length, total })}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            disabled={offset === 0}
+            onClick={() => setOffset(Math.max(0, offset - limit))}
+            className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
+          >
+            {t("list.prev") ?? "Anterior"}
+          </button>
+          <span className="text-sm text-gray-600">
+            {t("list.pageOf", { current: currentPage, pages })}
+          </span>
+          <button
+            disabled={offset + limit >= total}
+            onClick={() => setOffset(offset + limit)}
+            className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
+          >
+            {t("list.next") ?? "Siguiente"}
+          </button>
         </div>
       </div>
 
@@ -192,9 +245,9 @@ export default function BrandsList() {
         onCancel={() => setToDelete(null)}
         onConfirm={async () => {
           if (toDelete) {
-            await deleteBrand(toDelete); // elimina en backend
+            await deleteBrand(toDelete);
             setToDelete(null);
-            await load(); // refresca la tabla
+            await load();
           }
         }}
         text={t("actions.delete")}
