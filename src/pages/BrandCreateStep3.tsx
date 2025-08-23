@@ -5,20 +5,21 @@ import { useLanguage } from "../context/LanguageContext";
 export default function BrandCreateStep3() {
   const navigate = useNavigate();
   const location = useLocation() as { state?: { brand?: Brand } };
-  const brand = location.state?.brand;
+  const brand = location.state?.brand; // datos de la marca recién creada
   const { t } = useLanguage();
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
+      {/* Breadcrumb superior */}
       <div className="inline-flex items-center gap-2 rounded-xl bg-rose-100 text-rose-900 px-4 py-2 font-semibold">
         <span className="opacity-70">{t("breadcrumb.services")}</span>
         <span className="opacity-40">{t("breadcrumb.separator")}</span>
         <span>{t("breadcrumb.brandRegistry")}</span>
       </div>
 
+      {/* Card principal */}
       <div className="relative rounded-2xl border bg-white shadow-sm overflow-hidden p-8 space-y-6">
-        {/* Stepper */}
+        {/* Stepper de pasos */}
         <div className="flex items-center justify-center gap-6">
           <Step number={1} />
           <Line />
@@ -27,7 +28,7 @@ export default function BrandCreateStep3() {
           <Step number={3} active />
         </div>
 
-        {/* Check animado */}
+        {/* Ícono de check de éxito */}
         <div className="flex justify-center">
           <div className="h-20 w-20 rounded-full bg-emerald-100 flex items-center justify-center">
             <svg
@@ -46,6 +47,7 @@ export default function BrandCreateStep3() {
           </div>
         </div>
 
+        {/* Mensaje de éxito */}
         <h2 className="text-center text-xl font-semibold text-gray-800">
           {t("summary.success.title")}
         </h2>
@@ -53,7 +55,7 @@ export default function BrandCreateStep3() {
           {t("summary.success.subtitle")}
         </p>
 
-        {/* Resumen */}
+        {/* Resumen de datos de la marca */}
         {brand && (
           <div className="max-w-md mx-auto bg-gray-50 border rounded-xl p-6 space-y-2 text-sm">
             <div className="flex justify-between">
@@ -77,7 +79,7 @@ export default function BrandCreateStep3() {
           </div>
         )}
 
-        {/* Botones */}
+        {/* Botones de acción */}
         <div className="flex justify-center gap-4">
           <button
             onClick={() => navigate("/brands/")}
@@ -97,6 +99,7 @@ export default function BrandCreateStep3() {
   );
 }
 
+// Componente visual de paso
 function Step({
   number,
   active = false,
@@ -117,6 +120,8 @@ function Step({
     </div>
   );
 }
+
+// Línea entre pasos
 function Line() {
   return <div className="h-0.5 w-12 bg-gray-300" />;
 }

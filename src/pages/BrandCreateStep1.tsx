@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLanguage } from "../context/LanguageContext";
 
+// Validación: nombre de marca obligatorio (2–120 caracteres)
 const schema = z.object({
   brand_name: z.string().min(2, "Mínimo 2 caracteres").max(120, "Máximo 120"),
 });
@@ -13,8 +14,9 @@ type FormValues = z.infer<typeof schema>;
 
 export default function BrandCreateStep1() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useLanguage(); // traducciones
 
+  // Formulario con validación Zod
   const {
     register,
     handleSubmit,
@@ -24,13 +26,15 @@ export default function BrandCreateStep1() {
     defaultValues: { brand_name: "" },
   });
 
-  // loader barra superior
+  // Loader con barra de progreso
   const [saving, setSaving] = useState(false);
   const [progress, setProgress] = useState(0);
   const timerRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (saving) {
       setProgress(12);
+      // Avanza poco a poco hasta 90%
       timerRef.current = window.setInterval(() => {
         setProgress((p) => (p < 90 ? p + Math.max(1, (90 - p) * 0.08) : p));
       }, 120);
@@ -44,14 +48,16 @@ export default function BrandCreateStep1() {
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
+      {/* Breadcrumb superior */}
       <div className="inline-flex items-center gap-2 rounded-xl bg-rose-100 text-rose-900 px-4 py-2 font-semibold">
         <span className="opacity-70">{t("breadcrumb.services")}</span>
         <span className="opacity-40">{t("breadcrumb.separator")}</span>
         <span>{t("breadcrumb.brandRegistry")}</span>
       </div>
 
+      {/* Card principal */}
       <div className="relative rounded-2xl border bg-white shadow-sm overflow-hidden">
+        {/* Barra de progreso */}
         {progress > 0 && (
           <div className="absolute top-0 left-0 h-1 w-full bg-transparent">
             <div
@@ -62,7 +68,7 @@ export default function BrandCreateStep1() {
         )}
 
         <div className="p-6 md:p-8 space-y-6">
-          {/* Stepper */}
+          {/* Stepper de 3 pasos */}
           <div className="flex items-center justify-center gap-6">
             <Step number={1} active />
             <Line />
@@ -71,19 +77,23 @@ export default function BrandCreateStep1() {
             <Step number={3} />
           </div>
 
+          {/* Título */}
           <h2 className="text-center text-lg italic text-gray-600">
             {t("create.step1.title")}
           </h2>
 
+          {/* Formulario */}
           <form
             className="max-w-xl mx-auto space-y-4"
             onSubmit={handleSubmit(async (v) => {
               setSaving(true);
+              // Avanza al paso 2 con brand_name en state
               navigate("/brands/new/titular", {
                 state: { brand_name: v.brand_name },
               });
             })}
           >
+            {/* Campo: Nombre de marca */}
             <div>
               <label className="block text-sm font-medium">
                 {t("create.step1.label.brand")}
@@ -101,6 +111,7 @@ export default function BrandCreateStep1() {
               )}
             </div>
 
+            {/* Botones navegación */}
             <div className="flex justify-between">
               <button
                 type="button"
@@ -132,6 +143,7 @@ export default function BrandCreateStep1() {
   );
 }
 
+// Pasos del stepper
 function Step({
   number,
   active = false,
@@ -152,6 +164,8 @@ function Step({
     </div>
   );
 }
+
+// Línea entre pasos
 function Line() {
   return <div className="h-0.5 w-12 bg-gray-300" />;
 }

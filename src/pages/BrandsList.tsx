@@ -8,14 +8,16 @@ import { useLanguage } from "../context/LanguageContext";
 export default function BrandsList() {
   const { t } = useLanguage();
 
+  // Estado de la tabla
   const [items, setItems] = useState<Brand[]>([]);
   const [total, setTotal] = useState(0);
-  const [q, setQ] = useState("");
-  const [limit, setLimit] = useState(10);
-  const [offset, setOffset] = useState(0);
+  const [q, setQ] = useState(""); // búsqueda
+  const [limit, setLimit] = useState(10); // tamaño página
+  const [offset, setOffset] = useState(0); // inicio de página
   const [toDelete, setToDelete] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Carga datos desde backend
   async function load() {
     setLoading(true);
     const data = await listBrands({ q, limit, offset });
@@ -33,7 +35,7 @@ export default function BrandsList() {
 
   return (
     <div className="space-y-6 w-full">
-      {/* Barra superior: breadcrumb + CTA */}
+      {/* Header con breadcrumb y botón de nuevo registro */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="inline-flex items-center gap-2 rounded-xl bg-rose-100 text-rose-900 px-4 py-2 font-semibold">
           <span className="opacity-70">{t("breadcrumb.services")}</span>
@@ -49,7 +51,7 @@ export default function BrandsList() {
         </Link>
       </div>
 
-      {/* Filtros */}
+      {/* Barra de filtros (buscador + selector de límite) */}
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 w-full">
         <input
           className="w-full border rounded-lg px-3 py-2 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-black/10"
@@ -76,7 +78,7 @@ export default function BrandsList() {
         </select>
       </div>
 
-      {/* Card tabla */}
+      {/* Tabla de marcas */}
       <div className="rounded-2xl border bg-white shadow-sm overflow-hidden w-full">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
@@ -106,6 +108,7 @@ export default function BrandsList() {
                   <td className="p-3 font-medium">{b.brand_name}</td>
                   <td className="p-3">{b.titular ?? "-"}</td>
                   <td className="p-3">
+                    {/* Badge de estado */}
                     <span
                       className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
                       ${
@@ -124,6 +127,7 @@ export default function BrandsList() {
                     </span>
                   </td>
                   <td className="p-3 text-right">
+                    {/* Acciones: eliminar / editar */}
                     <div className="inline-flex gap-2">
                       <button
                         className="text-red-600 hover:text-red-700 font-semibold"
@@ -143,6 +147,7 @@ export default function BrandsList() {
                 </tr>
               ))}
 
+              {/* Mensaje si la tabla está vacía */}
               {!loading && items.length === 0 && (
                 <tr>
                   <td className="p-6 text-center text-gray-500" colSpan={5}>
@@ -165,7 +170,6 @@ export default function BrandsList() {
               onClick={() => setOffset(Math.max(0, offset - limit))}
               className="px-3 py-1.5 rounded-lg border bg-white disabled:opacity-50"
             >
-              {/* Podrías traducir “Anterior/Siguiente” si agregas claves */}
               Anterior
             </button>
             <span className="text-sm text-gray-600">
@@ -182,17 +186,18 @@ export default function BrandsList() {
         </div>
       </div>
 
+      {/* Modal de confirmación de borrado */}
       <ConfirmDelete
         open={!!toDelete}
         onCancel={() => setToDelete(null)}
         onConfirm={async () => {
           if (toDelete) {
-            await deleteBrand(toDelete);
+            await deleteBrand(toDelete); // elimina en backend
             setToDelete(null);
-            await load();
+            await load(); // refresca la tabla
           }
         }}
-        text={t("actions.delete")} // Puedes internacionalizar ConfirmDelete por dentro si prefieres
+        text={t("actions.delete")}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import { createBrand } from "../services/brands";
 import type { BrandCreate } from "../types/brand";
 import { useLanguage } from "../context/LanguageContext";
 
+// Validación: titular opcional, si viene debe tener 2–120 caracteres
 const schema = z.object({
   titular: z
     .string()
@@ -14,21 +15,22 @@ const schema = z.object({
     .max(120, "Máximo 120")
     .optional(),
 });
-
 type FormValues = z.infer<typeof schema>;
 
 export default function BrandCreateStep2() {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
+  // Recibe el brand_name desde el paso anterior
   const location = useLocation() as { state?: { brand_name?: string } };
   const brand_name = location.state?.brand_name;
 
-  // Si entran directo sin pasar por el paso 1, redirigimos
+  // Si entran directo (sin step1), redirige
   useEffect(() => {
     if (!brand_name) navigate("/brands/new", { replace: true });
   }, [brand_name, navigate]);
 
+  // Form con validación
   const {
     register,
     handleSubmit,
@@ -38,6 +40,7 @@ export default function BrandCreateStep2() {
     defaultValues: { titular: "" },
   });
 
+  // Loader de guardado con barra de progreso
   const [saving, setSaving] = useState(false);
   const [progress, setProgress] = useState(0);
   const timerRef = useRef<number | null>(null);
@@ -56,18 +59,20 @@ export default function BrandCreateStep2() {
     };
   }, [saving]);
 
-  if (!brand_name) return null;
+  if (!brand_name) return null; // evita render si no hay nombre
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
+      {/* Breadcrumb superior */}
       <div className="inline-flex items-center gap-2 rounded-xl bg-rose-100 text-rose-900 px-4 py-2 font-semibold">
         <span className="opacity-70">{t("breadcrumb.services")}</span>
         <span className="opacity-40">{t("breadcrumb.separator")}</span>
         <span>{t("breadcrumb.brandRegistry")}</span>
       </div>
 
+      {/* Card principal */}
       <div className="relative rounded-2xl border bg-white shadow-sm overflow-hidden">
+        {/* Barra de progreso */}
         {progress > 0 && (
           <div className="absolute top-0 left-0 h-1 w-full">
             <div
@@ -91,17 +96,20 @@ export default function BrandCreateStep2() {
             {t("create.step2.title")}
           </h2>
 
+          {/* Formulario */}
           <form
             className="max-w-xl mx-auto space-y-4"
             onSubmit={handleSubmit(async (v) => {
               try {
                 setSaving(true);
+                // Payload de creación
                 const payload: BrandCreate = {
                   brand_name,
-                  titular: v.titular?.trim() || undefined, // enviar undefined si vacío
+                  titular: v.titular?.trim() || undefined,
                 };
                 const brand = await createBrand(payload);
                 setSaving(false);
+                // Avanza al resumen (step3)
                 navigate("/brands/new/resumen", { state: { brand } });
               } catch (err) {
                 console.error(err);
@@ -110,6 +118,7 @@ export default function BrandCreateStep2() {
               }
             })}
           >
+            {/* Campo titular */}
             <div>
               <label className="block text-sm font-medium">
                 {t("create.step2.label.owner")}
@@ -127,6 +136,7 @@ export default function BrandCreateStep2() {
               )}
             </div>
 
+            {/* Botones navegación */}
             <div className="flex justify-between">
               <button
                 type="button"
@@ -159,6 +169,7 @@ export default function BrandCreateStep2() {
   );
 }
 
+// Componente visual de stepper
 function Step({
   number,
   active = false,
@@ -179,6 +190,8 @@ function Step({
     </div>
   );
 }
+
+// Línea entre pasos
 function Line() {
   return <div className="h-0.5 w-12 bg-gray-300" />;
 }
