@@ -21,7 +21,10 @@ export default function ConfirmDelete({
 
         {/* Botones de acción */}
         <div className="flex gap-2 justify-end">
-          <button className="px-4 py-2 border rounded" onClick={onCancel}>
+          <button
+            className="px-4 py-2 border rounded text-white"
+            onClick={onCancel}
+          >
             Cancelar
           </button>
           <button

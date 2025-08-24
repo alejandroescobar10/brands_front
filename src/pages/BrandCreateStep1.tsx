@@ -99,7 +99,7 @@ export default function BrandCreateStep1() {
                 {t("create.step1.label.brand")}
               </label>
               <input
-                className="mt-1 w-full border rounded px-3 py-2"
+                className="mt-1 w-full border rounded px-3 py-2 text-white"
                 placeholder={t("create.step1.placeholder.brand")}
                 aria-label={t("create.step1.label.brand")}
                 {...register("brand_name")}

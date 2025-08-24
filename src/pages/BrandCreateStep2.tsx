@@ -124,7 +124,7 @@ export default function BrandCreateStep2() {
                 {t("create.step2.label.owner")}
               </label>
               <input
-                className="mt-1 w-full border rounded px-3 py-2"
+                className="mt-1 w-full border rounded px-3 py-2 text-white"
                 placeholder={t("create.step2.placeholder.owner")}
                 aria-label={t("create.step2.label.owner")}
                 {...register("titular")}
