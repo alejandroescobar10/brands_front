@@ -135,44 +135,57 @@ export default function BrandsList() {
       </div>
 
       {/* ====== DESKTOP (tabla) ====== */}
-      <div className="hidden md:block rounded-2xl border bg-white shadow-sm overflow-hidden w-full">
+      <div
+        className="hidden md:block rounded-2xl border bg-white shadow-sm overflow-hidden w-full
+                dark:bg-gray-900 dark:border-gray-700"
+      >
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm table-auto">
-            <thead className="bg-gray-50 text-gray-600">
+            <thead
+              className="bg-gray-50 text-gray-600
+                       dark:bg-gray-800 dark:text-gray-300"
+            >
               <tr>
-                <th className="p-3 text-left font-semibold w-24">
+                <th className="p-3 text-left font-semibold text-gray-700 dark:text-gray-300 w-24">
                   {t("table.number")}
                 </th>
-                <th className="p-3 text-left font-semibold">
+                <th className="p-3 text-left font-semibold text-gray-700 dark:text-gray-300">
                   {t("table.brand")}
                 </th>
-                <th className="p-3 text-left font-semibold">
+                <th className="p-3 text-left font-semibold text-gray-700 dark:text-gray-300">
                   {t("table.owner")}
                 </th>
-                <th className="p-3 text-left font-semibold">
+                <th className="p-3 text-left font-semibold text-gray-700 dark:text-gray-300">
                   {t("table.status")}
                 </th>
-                <th className="p-3 text-right font-semibold w-56">
+                <th className="p-3 text-right font-semibold text-gray-700 dark:text-gray-300 w-56">
                   {t("table.actions")}
                 </th>
               </tr>
             </thead>
-            <tbody>
+
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {items.map((b, i) => (
-                <tr key={b.id} className="border-t">
-                  <td className="p-3 text-gray-500">#{offset + i + 1}</td>
-                  <td className="p-3 font-medium">{b.brand_name}</td>
-                  <td className="p-3">{b.titular ?? "-"}</td>
+                <tr key={b.id} className="bg-white dark:bg-gray-900">
+                  <td className="p-3 text-gray-500 dark:text-gray-400">
+                    #{offset + i + 1}
+                  </td>
+                  <td className="p-3 font-medium text-gray-800 dark:text-gray-100">
+                    {b.brand_name}
+                  </td>
+                  <td className="p-3 text-gray-700 dark:text-gray-200">
+                    {b.titular ?? "-"}
+                  </td>
                   <td className="p-3">
                     <span
                       className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
-                      ${
-                        b.status === "active"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : b.status === "inactive"
-                          ? "bg-gray-200 text-gray-700"
-                          : "bg-amber-100 text-amber-800"
-                      }`}
+                ${
+                  b.status === "active"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : b.status === "inactive"
+                    ? "bg-gray-200 text-gray-700"
+                    : "bg-amber-100 text-amber-800"
+                }`}
                     >
                       {b.status === "active"
                         ? t("status.active")
@@ -189,7 +202,9 @@ export default function BrandsList() {
                       >
                         {t("actions.delete")}
                       </button>
-                      <span className="text-gray-300">/</span>
+                      <span className="text-gray-300 dark:text-gray-600">
+                        /
+                      </span>
                       <Link
                         to={`/brands/${b.id}/edit`}
                         className="text-emerald-600 hover:text-emerald-700 font-semibold"
@@ -200,10 +215,12 @@ export default function BrandsList() {
                   </td>
                 </tr>
               ))}
-
               {!loading && items.length === 0 && (
-                <tr>
-                  <td className="p-6 text-center text-gray-500" colSpan={5}>
+                <tr className="bg-white dark:bg-gray-900">
+                  <td
+                    className="p-6 text-center text-gray-500 dark:text-gray-400"
+                    colSpan={5}
+                  >
                     {t("list.empty")}
                   </td>
                 </tr>

@@ -56,7 +56,7 @@ export default function BrandCreateStep1() {
       </div>
 
       {/* Card principal */}
-      <div className="relative rounded-2xl border bg-white shadow-sm overflow-hidden">
+      <div className="relative rounded-2xl border bg-white shadow-sm overflow-hidden dark:bg-gray-900 dark:border-gray-700">
         {/* Barra de progreso */}
         {progress > 0 && (
           <div className="absolute top-0 left-0 h-1 w-full bg-transparent">
@@ -78,7 +78,7 @@ export default function BrandCreateStep1() {
           </div>
 
           {/* Título */}
-          <h2 className="text-center text-lg italic text-gray-600">
+          <h2 className="text-center text-lg italic text-gray-600 dark:text-gray-300">
             {t("create.step1.title")}
           </h2>
 
@@ -87,7 +87,6 @@ export default function BrandCreateStep1() {
             className="max-w-xl mx-auto space-y-4"
             onSubmit={handleSubmit(async (v) => {
               setSaving(true);
-              // Avanza al paso 2 con brand_name en state
               navigate("/brands/new/titular", {
                 state: { brand_name: v.brand_name },
               });
@@ -95,11 +94,12 @@ export default function BrandCreateStep1() {
           >
             {/* Campo: Nombre de marca */}
             <div>
-              <label className="block text-sm font-medium">
+              <label className="block text-sm font-medium dark:text-gray-200">
                 {t("create.step1.label.brand")}
               </label>
               <input
-                className="mt-1 w-full border rounded px-3 py-2 text-white"
+                className="mt-1 w-full border rounded px-3 py-2 bg-white text-gray-900
+                           dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
                 placeholder={t("create.step1.placeholder.brand")}
                 aria-label={t("create.step1.label.brand")}
                 {...register("brand_name")}
@@ -116,7 +116,8 @@ export default function BrandCreateStep1() {
               <button
                 type="button"
                 onClick={() => navigate("/brands/")}
-                className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50"
+                className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50
+                           dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800"
               >
                 ← {t("actions.back")}
               </button>
@@ -157,7 +158,7 @@ function Step({
       ${
         active
           ? "bg-rose-500 text-white shadow"
-          : "bg-white border text-gray-700"
+          : "bg-white border text-gray-700 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
       }`}
     >
       {number}
@@ -167,5 +168,5 @@ function Step({
 
 // Línea entre pasos
 function Line() {
-  return <div className="h-0.5 w-12 bg-gray-300" />;
+  return <div className="h-0.5 w-12 bg-gray-300 dark:bg-gray-700" />;
 }

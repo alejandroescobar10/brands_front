@@ -18,7 +18,10 @@ export default function BrandCreateStep3() {
       </div>
 
       {/* Card principal */}
-      <div className="relative rounded-2xl border bg-white shadow-sm overflow-hidden p-8 space-y-6">
+      <div
+        className="relative rounded-2xl border bg-white shadow-sm overflow-hidden p-8 space-y-6
+                      dark:bg-gray-900 dark:border-gray-700"
+      >
         {/* Stepper de pasos */}
         <div className="flex items-center justify-center gap-6">
           <Step number={1} />
@@ -48,27 +51,36 @@ export default function BrandCreateStep3() {
         </div>
 
         {/* Mensaje de éxito */}
-        <h2 className="text-center text-xl font-semibold text-gray-800">
+        <h2 className="text-center text-xl font-semibold text-gray-800 dark:text-gray-100">
           {t("summary.success.title")}
         </h2>
-        <p className="text-center text-gray-600">
+        <p className="text-center text-gray-600 dark:text-gray-300">
           {t("summary.success.subtitle")}
         </p>
 
         {/* Resumen de datos de la marca */}
         {brand && (
-          <div className="max-w-md mx-auto bg-gray-50 border rounded-xl p-6 space-y-2 text-sm">
+          <div
+            className="max-w-md mx-auto bg-gray-50 border rounded-xl p-6 space-y-2 text-sm
+                          dark:bg-gray-800 dark:border-gray-700"
+          >
             <div className="flex justify-between">
-              <span className="font-medium">{t("table.brand")}:</span>
-              <span>{brand.brand_name}</span>
+              <span className="font-medium dark:text-gray-200">
+                {t("table.brand")}:
+              </span>
+              <span className="dark:text-gray-100">{brand.brand_name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-medium">{t("table.owner")}:</span>
-              <span>{brand.titular || "-"}</span>
+              <span className="font-medium dark:text-gray-200">
+                {t("table.owner")}:
+              </span>
+              <span className="dark:text-gray-100">{brand.titular || "-"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-medium">{t("table.status")}:</span>
-              <span className="capitalize">
+              <span className="font-medium dark:text-gray-200">
+                {t("table.status")}:
+              </span>
+              <span className="capitalize dark:text-gray-100">
                 {brand.status === "active"
                   ? t("status.active")
                   : brand.status === "inactive"
@@ -82,8 +94,9 @@ export default function BrandCreateStep3() {
         {/* Botones de acción */}
         <div className="flex justify-center gap-4">
           <button
-            onClick={() => navigate("/brands/")}
-            className="px-6 py-2 rounded-xl border bg-white hover:bg-gray-50"
+            onClick={() => navigate("/brands/new")}
+            className="px-6 py-2 rounded-xl border bg-white hover:bg-gray-50
+                       dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-800"
           >
             {t("actions.registerAnother")}
           </button>
@@ -113,7 +126,7 @@ function Step({
         ${
           active
             ? "bg-rose-500 text-white shadow"
-            : "bg-white border text-gray-700"
+            : "bg-white border text-gray-700 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
         }`}
     >
       {number}
@@ -123,5 +136,5 @@ function Step({
 
 // Línea entre pasos
 function Line() {
-  return <div className="h-0.5 w-12 bg-gray-300" />;
+  return <div className="h-0.5 w-12 bg-gray-300 dark:bg-gray-700" />;
 }
